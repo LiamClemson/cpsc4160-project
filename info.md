@@ -1,34 +1,31 @@
 # INFORMATION
 
+32in = 20.6lbs
+26in = 10.6lbs
+20in = 4.6lbs
+4in = 0.6lbs
 ## CAMBRIAN PERIOD
 
 *56 million years*
 **Fauna**
-arthropods, brachiopods
-Trilobites
+Ridlichia
+Paradoxide
 Anomalocaris
-Opabinia
-Pikaia
-Cambroraster
 Titanokorys
-Tokummia
-Balhuticaris
-Metaspriggina
-Surusicaris
-Peytoia
 Peytoia
 
 ## ORDOVICIAN PERIOD
+Great Ordovician Biodiversification Event
+
 
 *41 million years*
 **Fauna**
 Trilobite
 
-Endoceras
-Cameroceras
+Endoceras - ENEMY
+Eurypterid - ENEMYPentecopterus
+Aphetoceras
 Aegirocassis
-Eurypterid
-Birkenia
 Arandaspis
 
 ## SILURIAN PERIOD
@@ -37,7 +34,7 @@ Arandaspis
 **Fauna**
 Trilobite
 Eurypterid - Pterygotus
-
+Birkenia
 Platyceras
 Parioscorpio
 Poraspis
@@ -55,6 +52,7 @@ Onychodus
 Eastmanosteus
 Bothriolepis
 Cladoselache
+Jaekelopterus
 Eusthenopteron
 
 ## CARBONIFEROUS PERIOD
