@@ -2,16 +2,19 @@ import pygame
 import random
 from images import *
 
+#VARIABLES
 #CONSTANTS
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 500
 BACKGROUND_COLOR = (0, 51, 102)
 PURPLE = (230,230,250)
 
+''' FISHERMAN MODEL '''
 class Fisherman(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
 
+        self.initials = ''
         #SPRITE CHARACTERISTICS
         self.width = 50
         self.height = 25
@@ -97,8 +100,7 @@ class Fisherman(pygame.sprite.Sprite):
         if self.flip == True:
             screen.blit((pygame.transform.flip(self.actions[self.curr_action], True, False).convert_alpha()), (self.xpos, self.ypos))
     
-############################## END fisherman CLASS ##############################
-
+''' ENEMY MODEL '''
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -196,10 +198,32 @@ class Enemy(pygame.sprite.Sprite):
                 self.moving_up = False
                 self.moving_down = True
 
-    def compile_information(self):
-        text = 'Something has struck the ship...\n'
-        text += '...be wary, these waters aren\'t safe...\n\n'
-        text += '[ PRESS \'SPACEBAR\' TO CONTINUE FISHING ]'
+    def compile_information(self, curr_period):
+        if curr_period == 1:
+            text = 'An endoceras has struck the ship...\n'
+            text += 'These large straight shelled cephalopods roamed the waters from the Middle to Upper Ordovician...\n\n'
+            text += '...be wary, these waters aren\'t safe...\n\n'
+            text += '[ PRESS \'SPACEBAR\' TO CONTINUE FISHING ]'
+        elif curr_period == 2:
+            text = 'An pterygotus has struck the ship...\n'
+            text += 'These giant predatory eurypterids (sea scorpions) roamed the waters from the Middle Silurian to Late Devonian...\n\n'
+            text += '...be wary, these waters aren\'t safe...\n\n'
+            text += '[ PRESS \'SPACEBAR\' TO CONTINUE FISHING ]'
+        elif curr_period == 3:
+            text = 'An dunkleosteus has struck the ship...\n'
+            text += 'These enormous armored fish were the largest animals to exist up to this point in time and roamed the waters during the Late Devonian...\n\n'
+            text += '...be wary, these waters aren\'t safe...\n\n'
+            text += '[ PRESS \'SPACEBAR\' TO CONTINUE FISHING ]'
+        elif curr_period == 4:
+            text = 'An edestus has struck the ship...\n'
+            text += 'These giant cartilaginous fish had curved blade-like teeth and roamed the waters during the Late Carboniferous...\n\n'
+            text += '...be wary, these waters aren\'t safe...\n\n'
+            text += '[ PRESS \'SPACEBAR\' TO CONTINUE FISHING ]'
+        elif curr_period == 5:
+            text = 'An helicoprion has struck the ship...\n'
+            text += 'These huge shark-like fish had curved blade-like teeth and roamed the waters during the Permian...\n\n'
+            text += '...be wary, these waters aren\'t safe...\n\n'
+            text += '[ PRESS \'SPACEBAR\' TO CONTINUE FISHING ]'
         return text
 
     def display_text(self, screen, text, pos, font, font_color):
@@ -227,8 +251,8 @@ class Enemy(pygame.sprite.Sprite):
         if self.direction == 1:
             screen.blit((pygame.transform.flip(self.actions[self.curr_action], True, False).convert_alpha()), (self.xpos, self.ypos))
 
-############################## END enemy CLASS ##############################
 
+''' FISH AREA MODEL '''
 class FishArea(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -256,15 +280,6 @@ class FishArea(pygame.sprite.Sprite):
         self.last_update = pygame.time.get_ticks()
         self.cooldown = 100
         self.step = 0
-
-    #FUNC: sets random wait time between ripples
-    #def new_wait_time(self):
-    #    self.wait_time = (int(random.randint(0, 3)))*1000
-    
-    #FUNC: sets animation
-    #def add_images(self, ripple, ripple1, ripple2, ripple3, ripple4, ripple5, ripple6, ripple7):
-    #    tmp_img = [ripple, ripple1, ripple2, ripple3, ripple4, ripple5, ripple6, ripple7]
-    #    self.actions.append(tmp_img)
 
     #FUNC: sets new coordinates
     def set_location(self, new_x, new_y):
@@ -294,59 +309,8 @@ class FishArea(pygame.sprite.Sprite):
         if self.active == True:
             screen.blit(self.actions[self.curr_action][self.curr_frame], (self.xpos, self.ypos))
         self.randomly_ripple(current_time)
-############################## END ripples CLASS ##############################
-'''
-class Waves(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
 
-        #SPRITE CHARACTERISTICS
-        self.active = True
-        self.period = 0 #0 = cambrian, 5 = permian
-        self.width = 150
-        self.height = 150
-        self.xpos = 0
-        self.ypos = 0
-
-        #ANIMATION VARIABLES
-        self.actions = [[waves_img,waves2_img,waves3_img,waves4_img]]
-        self.curr_action = 0
-        self.curr_frame = 0
-        self.last_update = pygame.time.get_ticks()
-        self.cooldown = 150
-        self.step = 0
-
-    #FUNC: sets new coordinates
-    def set_location(self, new_x, new_y):
-        self.xpos = new_x
-        self.ypos = new_y
-    
-    #FUNC: sets new randomized coordinates
-    def set_location_random(self):
-        self.xpos = int(random.randint(0, SCREEN_WIDTH))
-        self.ypos = SCREEN_HEIGHT
-
-    def move_ripple(self, current_time):
-        if current_time - self.last_update >= self.cooldown:
-            self.curr_frame += 1
-            self.last_update = current_time
-            self.xpos += 1
-            self.ypos += 1
-            if self.curr_frame >= len(self.actions[self.curr_action]):
-                self.curr_frame = 0
-            self.xpos -= 2
-            self.ypos -= 2
-        if (self.ypos + self.height) < 0:
-            self.set_location_random()
-
-    #FUNC: blits/animates ripples on screen
-    def update(self, screen, current_time):
-        if self.active == True:
-            screen.blit(self.actions[self.curr_action][self.curr_frame], (self.xpos, self.ypos))
-        self.move_ripple(current_time)
-############################## END waves CLASS ##############################
-'''
-
+''' CREATURE MODEL '''
 class Creature(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -461,8 +425,7 @@ class Creature(pygame.sprite.Sprite):
     def update(self, screen):
         screen.blit(self.img, (self.imgxpos, self.imgypos))
 
-############################## END animal CLASS ##############################
-
+''' PERIOD MODEL '''
 class Period(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -503,8 +466,7 @@ class Period(pygame.sprite.Sprite):
             x = pos[0]
             y += word_height
 
-############################## END period CLASS ##############################
-
+''' POWERUP MODEL '''
 class Powerup(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -534,9 +496,6 @@ class Powerup(pygame.sprite.Sprite):
         self.xpos = int(random.randint(0, SCREEN_WIDTH-self.width))
         self.ypos = int(random.randint(100, SCREEN_HEIGHT-self.height))
 
-        #self.xpos = SCREEN_WIDTH + self.width
-        #self.ypos = int(random.randint(100,SCREEN_HEIGHT-self.height))
-
     def applyBonus(self, player):
         if self.enabled:
             if player.health < 5:
@@ -554,19 +513,6 @@ class Powerup(pygame.sprite.Sprite):
             pass
     
     def float(self, curr_time, bouy):
-        '''
-        if self.enabled == True and (self.xpos + self.width < 0):
-            self.set_location()
-        self.xpos -= 1
-        if self.drift == 1:
-            if self.ypos <= 100:
-                self.ypos += 1
-            self.ypos -= 1
-        if self.drift == 2:
-            if self.ypos+self.height >= SCREEN_HEIGHT:
-                self.ypos -= 1
-            self.ypos += 1
-        '''
         if (self.threshold + self.interval) - curr_time <= 0:
             self.drift = int(random.randint(1,2))
             if bouy == 1 and self.curr_img < 4:
@@ -578,16 +524,12 @@ class Powerup(pygame.sprite.Sprite):
             elif bouy == 2 and self.curr_img == 0: 
                 self.curr_img += 1
             self.threshold = curr_time
-        '''
-        if (self.xpos + self.width < 0):
-            self.enabled = False
-        '''
             
     def update(self, curr_time, screen, bouy):
         self.float(curr_time, bouy)
         screen.blit(self.img[self.curr_img], (self.xpos, self.ypos))
 
-
+''' BUOY OBSTACLE MODEL '''
 class BuoyObstacle(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
